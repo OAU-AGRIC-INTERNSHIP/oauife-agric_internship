@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Internship Tracker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Welcome to the Internship Tracker</h1>
+            <p class="lead">Your one-stop solution for managing internship projects.</p>
+            <hr class="my-4">
+            <p>Click below to access the appropriate dashboard:</p>
+            <a class="btn btn-primary btn-lg" href="{% url 'admin:index' %}" role="button">Admin Dashboard</a>
+            <a class="btn btn-success btn-lg" href="{% url 'intern:index' %}" role="button">Intern Dashboard</a>
+            <a class="btn btn-info btn-lg" href="{% url 'supervisor:index' %}" role="button">Supervisor Dashboard</a>
+        </div>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+

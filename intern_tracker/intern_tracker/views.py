@@ -5,4 +5,4 @@ def view_home(request):
     """
     Renders the home page.
     """
-    return render(request, 'home/home.html')
+    return render(request, 'home/index.html')
