@@ -26,5 +26,5 @@ for site in (admin.site, supervisor_ui):
     site.register(Class)
     site.register(Workshop)
 
-intern_ui.site.register(Class, ClassAdmin)
-intern_ui.site.register(Workshop, WorkshopAdmin)
+intern_ui.register(Class, ClassAdmin)
+intern_ui.register(Workshop, WorkshopAdmin)

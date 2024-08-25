@@ -55,7 +55,7 @@ for site in (admin.site, supervisor_ui):
     site.register(Proposal)
     site.register(Special)
 
-intern_ui.site.register(Teamwork, TeamworkAdmin)
-intern_ui.site.register(Proposal, ProposalAdmin)
-intern_ui.site.register(Special, SpecialAdmin)
+intern_ui.register(Teamwork, TeamworkAdmin)
+intern_ui.register(Proposal, ProposalAdmin)
+intern_ui.register(Special, SpecialAdmin)
 

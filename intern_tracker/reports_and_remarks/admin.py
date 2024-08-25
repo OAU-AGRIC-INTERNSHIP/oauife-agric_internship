@@ -37,6 +37,6 @@ for site in (admin.site, supervisor_ui):
     site.register(Report)
     site.register(Remark)
 
-intern_ui.site.register(Report, ReportAdmin)
-intern_ui.site.register(Remark, RemarkAdmin)
+intern_ui.register(Report, ReportAdmin)
+intern_ui.register(Remark, RemarkAdmin)
 

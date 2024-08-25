@@ -38,4 +38,4 @@ for site in (admin.site, intern_ui, supervisor_ui):
 for site in (admin.site, supervisor_ui):
     site.register(File, FileAdmin)
 
-intern_ui.site.register(File, FileAdmin)
+intern_ui.register(File, FileAdmin)
