@@ -1,9 +1,6 @@
 from django.contrib import admin
 from .models import Teamwork, Proposal, Special
-
-from django.contrib import admin
-from .models import Teamwork, Proposal, Special
-from internship_tracker.admin import intern_ui, supervisor_ui
+from intern_tracker.admin import intern_ui, supervisor_ui
 from django.contrib.auth.models import User
 from django.db.models import Q
 
