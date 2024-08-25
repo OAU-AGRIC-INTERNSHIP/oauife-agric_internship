@@ -27,7 +27,7 @@ class TeamAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        if request.user.is_superuser or request.user.groups.get('supervisors'):
+        if request.user.is_superuser or request.user.groups.filter(name='Supervisors').exists():
             return qs
         return qs.filter(members=request.user)
 
