@@ -8,6 +8,12 @@ class Profile(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     whatsapp = models.CharField(max_length=15)
 
+    def __str__(self):
+        return self.intern.username
+
 class Team(Group):
     lead = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="lead_team")
+
+    def __str__(self):
+        return self.name
 

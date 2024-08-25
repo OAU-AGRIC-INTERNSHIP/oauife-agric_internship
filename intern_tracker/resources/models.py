@@ -31,10 +31,16 @@ class Department(ResourceAbstract):
 class Grade(ResourceAbstract):
     pass
 
+class Harvest(ResourceAbstract):
+    pass
+
 class Input(ResourceAbstract):
     pass
 
 class Livestock(ResourceAbstract):
+    pass
+
+class Market(ResourceAbstract):
     pass
 
 class Material(ResourceAbstract):

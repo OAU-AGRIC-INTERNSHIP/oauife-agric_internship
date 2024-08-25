@@ -1,3 +1,4 @@
+from django.db import models
 from intern_tracker.abstract_models import ProductionAbstract, ActivityAbstract, CommentAbstract, InputAbstract, HarvestingAbstract, MarketingAbstract, ProcessingAbstract
 from assignments.models import Special
 
