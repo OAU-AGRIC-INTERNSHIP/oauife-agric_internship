@@ -42,7 +42,7 @@ class ProcessingAdmin(admin.ModelAdmin):
     list_display = ('production', 'process')
     search_fields = ['process']
 
-# Register the models with the custom admin sites
+# Register the models with the admin sites
 for site in (admin.site, supervisor_ui):
     site.register(Production)
     site.register(Activity)
