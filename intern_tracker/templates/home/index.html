@@ -1,30 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Internship Tracker</title>
-    <!-- Bootstrap CSS -->
+    <title>Internship Portal</title>
+    <link rel="stylesheet" href="{% static 'css/home/styles.css' %}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body>
-    <div class="container">
-        <div class="jumbotron text-center">
-            <h1 class="display-4">Welcome to the Internship Tracker</h1>
-            <p class="lead">Your one-stop solution for managing internship projects.</p>
-            <hr class="my-4">
-            <p>Click below to access the appropriate dashboard:</p>
-            <a class="btn btn-primary btn-lg" href="{% url 'admin:index' %}" role="button">Admin Dashboard</a>
-            <a class="btn btn-success btn-lg" href="{% url 'intern:index' %}" role="button">Intern Dashboard</a>
-            <a class="btn btn-info btn-lg" href="{% url 'supervisor:index' %}" role="button">Supervisor Dashboard</a>
-        </div>
-    </div>
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
 
+<body>
+    <div class="container text-center">
+        <h1 class="my-5">Welcome to the Agricultural Internship Portal</h1>
+        <div class="btn-group-vertical my-5">
+            <a href="{% url 'admin:index' %}" class="btn btn-danger btn-lg mb-3">Admin Dashboard</a>
+            <a href="{% url 'supervisor:index' %}" class="btn btn-primary btn-lg mb-3">Supervisor Dashboard</a>
+            <a href="{% url 'intern:index' %}" class="btn btn-success btn-lg mb-3">Intern Dashboard</a>
+        </div>
+        <button class="btn btn-secondary mt-3" id="darkModeToggle">Toggle Dark Mode</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/home/script.js' %}"></script>
+</body>
+
+</html>
