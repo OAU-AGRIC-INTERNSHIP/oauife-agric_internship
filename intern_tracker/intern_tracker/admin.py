@@ -12,7 +12,7 @@ class SupervisorAdminSite(AdminSite):
 
 # Define a custom admin site for Interns
 class InternAdminSite(AdminSite):
-    site_header = "Internship Tracker"
+    site_header = "Internship Tracker - Intern"
     site_title = "Intern Site UI"
     index_title = "Welcome to the Internship Tracker"
 

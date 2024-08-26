@@ -23,6 +23,8 @@ def redirect_to_proper_path(request):
         return redirect(reverse('supervisor:index'))
     return redirect(reverse('home'))
 
+# Write code that does the redirect to proper path check before trying to match any url
+
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('intern/', intern_ui.urls, name='intern'),

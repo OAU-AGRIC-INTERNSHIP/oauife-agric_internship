@@ -1,0 +1,49 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Internship Tracker{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    {% if 'admin' in request.path %}
+    <a href="{% url 'admin:index' %}">Admin Dashboard</a>
+    {% elif 'intern' in request.path %}
+    <a href="{% url 'intern:index' %}">Intern Dashboard</a>
+    {% elif 'supervisor' in request.path %}
+    <a href="{% url 'supervisor:index' %}">Supervisor Dashboard</a>
+    {% endif %}
+</h1>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+
+<!-- <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+<link rel="manifest" href="{% static 'manifest.json' %}"> -->
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/base_site.css' %}">
+
+{% if 'admin' in request.path %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_site.css' %}">
+{% elif 'intern' in request.path %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/intern_ui.css' %}">
+{% elif 'supervisor' in request.path %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/supervisor_ui.css' %}">
+{% endif %}
+
+<script type="text/javascript" src="{% static 'js/base_site.js' %}"></script>
+
+<!-- <script>
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register("{% static 'serviceworker.js' %}")
+			.then(function (registration) {
+				console.log('ServiceWorker registration successful with scope: ', registration.scope);
+			}).catch(function (error) {
+				console.log('ServiceWorker registration failed: ', error);
+			});
+	}
+</script> -->
+
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
