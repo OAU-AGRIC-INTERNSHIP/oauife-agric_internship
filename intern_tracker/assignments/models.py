@@ -5,7 +5,7 @@ from resources.models import Timeline, Unit, Livestock, Crop, Location, File
 
 class Teamwork(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    title = models.CharField(max_length='24')
+    title = models.CharField(max_length=24)
     task = models.TextField()
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
