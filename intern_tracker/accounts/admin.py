@@ -53,9 +53,6 @@ class ProfileAdmin(admin.ModelAdmin):
         if request.user.groups.filter(name='Supervisors').exists():
             return some_fields + ['whatsapp']
         return some_fields
-        # if not request.user.is_superuser:
-        #     return ['intern']
-        # return super().get_readonly_fields(request, obj)
 
 # Customize the TeamAdmin class
 class TeamAdmin(admin.ModelAdmin):
