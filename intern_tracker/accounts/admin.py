@@ -30,8 +30,11 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        
-        if request.user.is_superuser or request.user.groups.filter(name='Supervisors').exists():
+        # Allow Superusers to access all intern profiles
+        if request.user.is_superuser:
+            return qs
+        # Allow Supervisors access to only the profiles of interns under teams assigned to the units they supervise
+        if request.user.groups.filter(name='Supervisors').exists():
             units = request.user.unit_set.all()
             
             # Filter profiles based on the team members of the units' teamworks
@@ -40,7 +43,7 @@ class ProfileAdmin(admin.ModelAdmin):
             ).distinct()
             
             return profiles
-            # return qs.filter(intern__team__teamwork__unit__supervisor=request.user.unit_set.all())
+        # Allow Interns access to their respective profiles only
         return qs.filter(intern=request.user)
 
     def get_readonly_fields(self, request, obj=None):
@@ -62,8 +65,11 @@ class TeamAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        
-        if request.user.is_superuser or request.user.groups.filter(name='Supervisors').exists():
+        # Allow Superusers to access all teams
+        if request.user.is_superuser:
+            return qs
+        # Allow Supervisors access to only teams assigned to units they supervise
+        if request.user.groups.filter(name='Supervisors').exists():
             units = request.user.unit_set.all()
             
             # Filter teams based on the teams assigned the units' teamworks
@@ -72,6 +78,7 @@ class TeamAdmin(admin.ModelAdmin):
             ).distinct()
             
             return teams
+        # Allow Interns access to only the teams they belong
         return qs.filter(intern=request.user)
 
     def get_members(self, obj):
