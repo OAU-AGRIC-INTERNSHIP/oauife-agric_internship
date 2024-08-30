@@ -57,7 +57,7 @@ class Timeline(ResourceAbstract):
     end_date = models.DateField()
 
 class Unit(ResourceAbstract):
-    pass
+    supervisor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 class Location(models.Model):
     name = models.CharField(max_length=255)
