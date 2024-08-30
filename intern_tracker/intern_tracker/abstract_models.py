@@ -14,7 +14,6 @@ class ActivityAbstract(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE, null=True, blank=True, related_name="%(app_label)s_%(class)s_related")
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
     mortality = models.IntegerField(null=True, blank=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
 
     class Meta:
         abstract = True
@@ -24,7 +23,7 @@ class CommentAbstract(models.Model):
     weaknesses = models.TextField()
     opportunities = models.TextField()
     threats = models.TextField()
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related")
 
     class Meta:
         abstract = True
@@ -33,7 +32,6 @@ class InputAbstract(models.Model):
     input = models.ForeignKey(Input, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
 
     class Meta:
         abstract = True
@@ -43,7 +41,6 @@ class HarvestingAbstract(models.Model):
     date = models.DateField()
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     minutes_spent = models.IntegerField()
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
 
     class Meta:
         abstract = True
@@ -56,7 +53,6 @@ class MarketingAbstract(models.Model):
     quantity_sold = models.DecimalField(max_digits=10, decimal_places=2)
     quantity_given_out = models.DecimalField(max_digits=10, decimal_places=2)
     quantity_lost = models.DecimalField(max_digits=10, decimal_places=2)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
 
     class Meta:
         abstract = True
@@ -65,7 +61,6 @@ class ProcessingAbstract(models.Model):
     raw_material = models.CharField(max_length=100)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     process = models.CharField(max_length=100)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
 
     class Meta:
         abstract = True

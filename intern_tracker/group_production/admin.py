@@ -23,8 +23,13 @@ class ActivityAdmin(admin.ModelAdmin):
     search_fields = ['description']
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('production', 'creator')
+    list_display = ('production',)
     search_fields = ['creator__username']
+
+    def save_model(self, request, obj, form, change):
+        if not change or not obj.creator:
+            obj.creator = request.user
+        super().save_model(request, obj, form, change)
 
 class InputAdmin(admin.ModelAdmin):
     list_display = ('production', 'quantity')

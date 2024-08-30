@@ -49,7 +49,7 @@ class ProfileAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
             return super().get_readonly_fields(request, obj)        
-        some_fields = ['get_username', 'matric_number', 'department']
+        some_fields = ['intern', 'matric_number', 'department']
         if request.user.groups.filter(name='Supervisors').exists():
             return some_fields + ['whatsapp']
         return some_fields
@@ -75,8 +75,9 @@ class TeamAdmin(admin.ModelAdmin):
             ).distinct()
             
             return teams
-        # Allow Interns access to only the teams they belong
-        return qs.filter(intern=request.user)
+        # Allow Interns access to only the teams (and group) they belong
+        team = request.user.groups.all()
+        return qs.filter(group_ptr__team__in=team)
 
     def get_members(self, obj):
         return ", ".join([user.username for user in obj.user_set.all()])
