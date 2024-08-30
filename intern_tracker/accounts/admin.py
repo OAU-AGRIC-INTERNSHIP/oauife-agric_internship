@@ -30,14 +30,23 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        if request.user.is_superuser:
-            return qs
+        
+        if request.user.is_superuser or request.user.groups.filter(name='Supervisors').exists():
+            units = request.user.unit_set.all()
+            
+            # Filter profiles based on the team members of the units' teamworks
+            profiles = qs.filter(
+                intern__groups__team__teamwork__unit__in=units
+            ).distinct()
+            
+            return profiles
+            # return qs.filter(intern__team__teamwork__unit__supervisor=request.user.unit_set.all())
         return qs.filter(intern=request.user)
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
             return super().get_readonly_fields(request, obj)        
-        some_fields = ['intern', 'matric_number', 'department']
+        some_fields = ['get_username', 'matric_number', 'department']
         if request.user.groups.filter(name='Supervisors').exists():
             return some_fields + ['whatsapp']
         return some_fields
@@ -53,9 +62,17 @@ class TeamAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
+        
         if request.user.is_superuser or request.user.groups.filter(name='Supervisors').exists():
-            return qs
-        return qs.filter(members=request.user)
+            units = request.user.unit_set.all()
+            
+            # Filter teams based on the teams assigned the units' teamworks
+            teams = qs.filter(
+                teamwork__unit__in=units
+            ).distinct()
+            
+            return teams
+        return qs.filter(intern=request.user)
 
     def get_members(self, obj):
         return ", ".join([user.username for user in obj.user_set.all()])
