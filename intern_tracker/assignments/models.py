@@ -19,18 +19,27 @@ class Teamwork(models.Model):
 class Proposal(models.Model):
     intern = models.ForeignKey(User, on_delete=models.CASCADE)
     document = models.ForeignKey(File, on_delete=models.CASCADE)
-    timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    task = models.TextField()
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    title = models.CharField(max_length=24)
+    timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE, null=True, blank=True)
+    task = models.TextField(null=True, blank=True)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True, blank=True)
     livestock = models.ForeignKey(Livestock, on_delete=models.CASCADE, null=True, blank=True)
     crop = models.ForeignKey(Crop, on_delete=models.CASCADE, null=True, blank=True)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True)
     comments_by_supervisor = models.TextField(blank=True, null=True)
     approved = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.title
+
 class Special(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
+    title = models.CharField(max_length=24)
     task = models.TextField()
     miscellaneous_group = models.ForeignKey(Team, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    supervisors = models.ManyToManyField(User)
+
+    def __str__(self):
+        return self.title
 

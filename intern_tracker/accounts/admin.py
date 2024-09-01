@@ -60,6 +60,13 @@ class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'lead', 'get_members')
     search_fields = ['name']
 
+    def get_form(self, request, obj=None, **kwargs):
+        """Custom form selection based on creation or editing"""
+        form = super().get_form(request, obj, **kwargs)
+        if not obj:  # During creation, remove 'lead' field
+            form.base_fields.pop('lead', None)
+        return form
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         # Allow Superusers to access all teams

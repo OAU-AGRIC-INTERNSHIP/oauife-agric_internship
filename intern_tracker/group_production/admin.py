@@ -10,7 +10,9 @@ class ProductionAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(teamwork__team__members=request.user)
+        
+        teams = request.user.groups.all()
+        return qs.filter(teamwork__team__in=teams)
 
     def get_readonly_fields(self, request, obj=None):
         if not request.user.is_superuser:
@@ -30,6 +32,11 @@ class CommentAdmin(admin.ModelAdmin):
         if not change or not obj.creator:
             obj.creator = request.user
         super().save_model(request, obj, form, change)
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return ['creator']
+        return super().get_readonly_fields(request, obj)
 
 class InputAdmin(admin.ModelAdmin):
     list_display = ('production', 'quantity')

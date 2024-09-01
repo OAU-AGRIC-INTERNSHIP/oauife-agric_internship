@@ -1,24 +1,28 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib import admin
+from django.contrib.auth.models import User, Group
+from .models import Team  
 
-from .models import Team
-
-# Reuse or create a custom form for Team
 class TeamAdminForm(forms.ModelForm):
     members = forms.ModelMultipleChoiceField(
-        queryset=User.objects.all(),
+        queryset=Group.objects.get(name='Interns').user_set.all(), #User.objects.filter(groups__name='Interns'),
         required=False,
         widget=admin.widgets.FilteredSelectMultiple('Users', is_stacked=False)
     )
 
     class Meta:
         model = Team
-        fields = ('name', 'permissions', 'members')
+        fields = ('name', 'members', 'lead')  # 'lead' is not included here initially
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.pk:  # If the team already exists
+        
+        if self.instance.pk:  # If editing an existing team
+            self.fields['lead'] = forms.ModelChoiceField(
+                queryset=self.instance.user_set.all(),
+                required=True,
+                widget=forms.Select
+            )
             self.fields['members'].initial = self.instance.user_set.all()
 
     def save(self, commit=True):

@@ -10,7 +10,9 @@ class ProductionAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(special__miscellaneous_group__members=request.user)
+        groups = request.user.groups.all()
+        # return qs.filter(group_ptr__team__in=team)
+        return qs.filter(special__miscellaneous_group__in=groups)
 
     def get_readonly_fields(self, request, obj=None):
         if not request.user.is_superuser:
