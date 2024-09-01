@@ -11,12 +11,26 @@ class FileAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
+        # Supervisors should see only files by self or interns assigned to their unit
+        if request.user.groups.filter(name='Supervisors').exists():
+            units = request.user.unit_set.all()
+            files = qs.filter(owner__groups__team__teamwork__unit__in=units).distinct()
+            return files
+        # Interns should see only files created by them
         return qs.filter(owner=request.user)
 
-    def get_readonly_fields(self, request, obj=None):
+    def save_model(self, request, obj, form, change):
+        # If the object is being created (not edited), set the owner to the current user
+        if not change:  # 'change' is False when the object is being created
+            obj.owner = request.user
+        super().save_model(request, obj, form, change)
+
+    def get_fields(self, request, obj=None):
+        # Exclude the owner field from the form entirely
+        fields = super().get_fields(request, obj)
         if not request.user.is_superuser:
-            return ['owner']
-        return super().get_readonly_fields(request, obj)
+            fields = [f for f in fields if f != 'owner']
+        return fields
 
 # Register the models with the custom admin sites
 for site in (admin.site, intern_ui, supervisor_ui):

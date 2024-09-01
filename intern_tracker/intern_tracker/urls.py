@@ -10,6 +10,7 @@ from django.urls import path, reverse
 from django.shortcuts import redirect
 from intern_tracker.admin import intern_ui, supervisor_ui
 from . import views  # Import the views module
+from django.conf import settings
 
 def redirect_to_proper_path(request):
     """
@@ -32,3 +33,6 @@ urlpatterns = [
     path('home/', views.view_home, name='home'),  # Corrected to reference a view function
     path('', redirect_to_proper_path),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

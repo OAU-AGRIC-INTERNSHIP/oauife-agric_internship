@@ -27,7 +27,7 @@ class TeamworkAdmin(admin.ModelAdmin):
         return super().get_readonly_fields(request, obj)
 
 class ProposalAdmin(admin.ModelAdmin):
-    list_display = ('intern', 'document', 'timeline', 'task', 'livestock', 'crop', 'location')
+    list_display = ('title', 'intern', 'document', 'timeline', 'task', 'unit', 'location')
     search_fields = ['task']
 
     def get_queryset(self, request):
@@ -47,11 +47,18 @@ class ProposalAdmin(admin.ModelAdmin):
             return []
         return super().get_readonly_fields(request, obj)
 
+    def save_model(self, request, obj, form, change):
+        if not request.user.is_superuser or request.user.groups.filter(name='Supervisors').exists():
+        # If the object is being created (not edited), set the owner to the current user
+            if not change:  # 'change' is False when the object is being created
+                obj.intern = request.user
+            super().save_model(request, obj, form, change)
+
     def get_form(self, request, obj=None, **kwargs):
         if request.user.is_superuser:
             self.exclude = ()
         elif request.user.groups.filter(name='Supervisors').exists():
-            self.exclude = ('intern', 'document', 'task', 'livestock', 'crop')
+            self.exclude = ('intern', 'document', 'title', 'task', 'livestock', 'crop')
         else:
             self.exclude = ('intern', 'timeline', 'comments_by_supervisor', 'approved',)
         
@@ -85,12 +92,12 @@ class SpecialAdmin(admin.ModelAdmin):
         return ['timeline', 'task', 'miscellaneous_group', 'location', 'supervisors']
 
 # Register the models with the admin sites
-for site in (admin.site, supervisor_ui):
-    site.register(Teamwork)
-    site.register(Proposal)
-    site.register(Special)
+for site in (intern_ui, supervisor_ui):
+    site.register(Teamwork, TeamworkAdmin)
+    site.register(Proposal, ProposalAdmin)
+    site.register(Special, SpecialAdmin)
 
-intern_ui.register(Teamwork, TeamworkAdmin)
-intern_ui.register(Proposal, ProposalAdmin)
-intern_ui.register(Special, SpecialAdmin)
+admin.site.register(Teamwork)
+admin.site.register(Proposal)
+admin.site.register(Special)
 
