@@ -10,9 +10,17 @@ class Class(models.Model):
     information = models.TextField()
     attendees = models.ManyToManyField('auth.Group')
 
+    class Meta:
+        verbose_name = 'Class'
+        verbose_name_plural = "Classes"
+
 class Workshop(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateField()
     time = models.TimeField()
     flyer = models.ImageField(upload_to='workshop_flyers/')
+
+    class Meta:
+        verbose_name = 'Workshop'
+        verbose_name_plural = "Workshops"
 

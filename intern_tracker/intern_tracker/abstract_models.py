@@ -7,6 +7,8 @@ class ProductionAbstract(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = "PRODUCTION"
+        verbose_name_plural = "PRODUCTIONS"
 
 class ActivityAbstract(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
