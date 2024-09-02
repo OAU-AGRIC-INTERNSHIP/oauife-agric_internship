@@ -13,6 +13,10 @@ class Teamwork(models.Model):
     crop = models.ForeignKey(Crop, on_delete=models.CASCADE, null=True, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = "Teamwork"
+        verbose_name_plural = "Teamwork"
+
     def __str__(self):
         return self.title
 
@@ -29,6 +33,10 @@ class Proposal(models.Model):
     comments_by_supervisor = models.TextField(blank=True, null=True)
     approved = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = "Proposal"
+        verbose_name_plural = "Proposals"
+
     def __str__(self):
         return self.title
 
@@ -39,6 +47,10 @@ class Special(models.Model):
     miscellaneous_group = models.ForeignKey(Team, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     supervisors = models.ManyToManyField(User)
+
+    class Meta:
+        verbose_name = "Special"
+        verbose_name_plural = "Specials"
 
     def __str__(self):
         return self.title

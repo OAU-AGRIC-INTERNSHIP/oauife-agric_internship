@@ -17,6 +17,8 @@ class ActivityAbstract(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = "Activity"
+        verbose_name_plural = "Activities"
 
     def __str__(self):
         return f"{self.activity}" 
@@ -29,6 +31,8 @@ class CommentAbstract(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = "SWOT"
+        verbose_name_plural = "SWOT Comments"
 
 class InputAbstract(models.Model):
     input = models.ForeignKey(Input, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
@@ -49,6 +53,8 @@ class HarvestingAbstract(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = "Harvesting"
+        verbose_name_plural = "Harvesting"
 
     def __str__(self):
         return f"{self.harvest}" 
@@ -64,6 +70,8 @@ class MarketingAbstract(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = "Marketing"
+        verbose_name_plural = "Marketing"
 
     def __str__(self):
         return f"{self.market}" 
@@ -75,6 +83,8 @@ class ProcessingAbstract(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = "Processing"
+        verbose_name_plural = "Processing"
 
     def __str__(self):
         return f"{self.process}" 
