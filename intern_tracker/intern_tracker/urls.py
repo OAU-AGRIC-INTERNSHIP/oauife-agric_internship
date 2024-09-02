@@ -11,6 +11,7 @@ from django.shortcuts import redirect
 from intern_tracker.admin import intern_ui, supervisor_ui
 from . import views  # Import the views module
 from django.conf import settings
+from django.conf.urls.static import static
 
 def redirect_to_proper_path(request):
     """

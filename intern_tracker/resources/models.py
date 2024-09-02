@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from pathlib import Path
 
 User = get_user_model()
 
@@ -73,4 +75,21 @@ class File(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        # Validate the file type
+        file_extension = Path(self.file.name).suffix.lower()
+        if file_extension != '.pdf':
+            raise ValidationError('Only PDF files are allowed.')
+
+        # Validate the file size
+        file_size = self.file.size
+        max_size_in_mb = 2
+        if file_size > max_size_in_mb * 1024 * 1024:  # Convert MB to Bytes
+            raise ValidationError(f'The file size should not exceed {max_size_in_mb}MB.')
+
+    def save(self, *args, **kwargs):
+        self.clean()  # Ensure the file is validated before saving
+        super().save(*args, **kwargs)
+
 

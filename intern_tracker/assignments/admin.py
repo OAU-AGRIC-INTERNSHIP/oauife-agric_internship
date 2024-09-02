@@ -2,10 +2,10 @@ from django.contrib import admin
 from .models import Teamwork, Proposal, Special
 from intern_tracker.admin import intern_ui, supervisor_ui
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.utils.html import format_html
 
 class TeamworkAdmin(admin.ModelAdmin):
-    list_display = ('timeline', 'task', 'team', 'unit', 'livestock', 'crop', 'location')
+    list_display = ('title', 'timeline', 'task', 'team', 'unit', 'livestock', 'crop', 'location')
     search_fields = ['task']
 
     def get_queryset(self, request):
@@ -27,8 +27,14 @@ class TeamworkAdmin(admin.ModelAdmin):
         return super().get_readonly_fields(request, obj)
 
 class ProposalAdmin(admin.ModelAdmin):
-    list_display = ('title', 'intern', 'document', 'timeline', 'task', 'unit', 'location')
-    search_fields = ['task']
+    list_display = ('title', 'approved', 'intern', 'file_link', 'timeline', 'task', 'unit', 'location')
+
+    def file_link(self, obj):
+        # This returns a clickable link to the file
+        return format_html('<a href="{}">{}</a>', obj.document.file.url, obj.document.name)
+
+    file_link.short_description = 'PDF'
+
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -42,16 +48,10 @@ class ProposalAdmin(admin.ModelAdmin):
             
         return qs.filter(intern=request.user)
 
-    def get_readonly_fields(self, request, obj=None):
-        if request.user.groups.filter(name='Supervisors').exists():
-            return []
-        return super().get_readonly_fields(request, obj)
-
     def save_model(self, request, obj, form, change):
         if not request.user.is_superuser or request.user.groups.filter(name='Supervisors').exists():
-        # If the object is being created (not edited), set the owner to the current user
-            if not change:  # 'change' is False when the object is being created
-                obj.intern = request.user
+            if not change:  # If the object is being created (not edited)
+                obj.intern = request.user   # Set the owner to the current user
             super().save_model(request, obj, form, change)
 
     def get_form(self, request, obj=None, **kwargs):
@@ -67,8 +67,17 @@ class ProposalAdmin(admin.ModelAdmin):
 
 
 class SpecialAdmin(admin.ModelAdmin):
-    list_display = ('timeline', 'task', 'miscellaneous_group', 'location')
-    search_fields = ['task']
+    list_display = ('title', 'timeline', 'task', 'miscellaneous_group', 'get_supervisors', 'location')
+    search_fields = ['title', 'task']
+
+    def get_supervisors(self, obj):
+        supervisors = obj.supervisors.all()
+        if supervisors.exists():
+            return supervisors
+        return "None"
+
+    get_supervisors.short_description = "Supervisors"
+
     # Superusers can see all special tasks
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -82,22 +91,13 @@ class SpecialAdmin(admin.ModelAdmin):
         groups = request.user.groups.all()
         return qs.filter(miscellaneous_group__in=groups)
 
-    def get_readonly_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return super().get_readonly_fields(request, obj)
-        
-        if request.user.groups.filter(name='Supervisors').exists():
-            return ['supervisors']
-
-        return ['timeline', 'task', 'miscellaneous_group', 'location', 'supervisors']
-
 # Register the models with the admin sites
-for site in (intern_ui, supervisor_ui):
+for site in (intern_ui, supervisor_ui, admin.site):
     site.register(Teamwork, TeamworkAdmin)
     site.register(Proposal, ProposalAdmin)
     site.register(Special, SpecialAdmin)
 
-admin.site.register(Teamwork)
-admin.site.register(Proposal)
-admin.site.register(Special)
+# admin.site.register(Teamwork)
+# admin.site.register(Proposal)
+# admin.site.register(Special)
 

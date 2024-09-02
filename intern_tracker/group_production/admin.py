@@ -3,23 +3,32 @@ from .models import Production, Activity, Comment, Input, Harvesting, Marketing,
 from intern_tracker.admin import intern_ui, supervisor_ui
 
 class ProductionAdmin(admin.ModelAdmin):
-    list_display = ('teamwork',)
-    search_fields = []
+    list_display = ('teamwork', 'started')
+    search_fields = ['teamwork']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
+        # Superuser can get all group productions
         if request.user.is_superuser:
             return qs
+        # Supervisors can get only productions related to teamworks under their supervision
+        if request.user.groups.filter(name='Supervisors').exists():
+            units = request.user.unit_set.all()
+            teams = qs.filter(teamwork__unit__in=units).distinct()
+            return teams
+        # Interns can get only productions of teamworks they are a part of
+        return qs.filter(teamwork__team__in=request.user.groups.all())
+
+    def get_form(self, request, obj=None, **kwargs):
+        # The 'started' field autosaves the time the production was created and is not needed on the form
+        if request.user.is_superuser:
+            self.exclude = ()
+        else:
+            self.exclude = ('started',)
         
-        teams = request.user.groups.all()
-        return qs.filter(teamwork__team__in=teams)
+        form = super().get_form(request, obj, **kwargs)  # Capture the returned form class
+        return form  # Return the form class
 
-    def get_readonly_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return ['teamwork']
-        return super().get_readonly_fields(request, obj)
-
-# Other model admins will follow similar patterns
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('production', 'description')
     search_fields = ['description']
@@ -27,16 +36,6 @@ class ActivityAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('production',)
     search_fields = ['creator__username']
-
-    def save_model(self, request, obj, form, change):
-        if not change or not obj.creator:
-            obj.creator = request.user
-        super().save_model(request, obj, form, change)
-
-    def get_readonly_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return ['creator']
-        return super().get_readonly_fields(request, obj)
 
 class InputAdmin(admin.ModelAdmin):
     list_display = ('production', 'quantity')
@@ -55,22 +54,22 @@ class ProcessingAdmin(admin.ModelAdmin):
     search_fields = ['process']
 
 # Register the models with the admin sites
-for site in (admin.site, supervisor_ui):
-    site.register(Production)
-    site.register(Activity)
-    site.register(Comment)
-    site.register(Input)
-    site.register(Harvesting)
-    site.register(Marketing)
-    site.register(Processing)
+for site in (intern_ui, supervisor_ui, admin.site):
+    site.register(Production, ProductionAdmin)
+    site.register(Activity, ActivityAdmin)
+    site.register(Comment, CommentAdmin)
+    site.register(Input, InputAdmin)
+    site.register(Harvesting, HarvestingAdmin)
+    site.register(Marketing, MarketingAdmin)
+    site.register(Processing, ProcessingAdmin)
 
-intern_ui.register(Production, ProductionAdmin)
-intern_ui.register(Activity, ActivityAdmin)
-intern_ui.register(Comment, CommentAdmin)
-intern_ui.register(Input, InputAdmin)
-intern_ui.register(Harvesting, HarvestingAdmin)
-intern_ui.register(Marketing, MarketingAdmin)
-intern_ui.register(Processing, ProcessingAdmin)
+# admin.site.register(Production)
+# admin.site.register(Activity)
+# admin.site.register(Comment)
+# admin.site.register(Input)
+# admin.site.register(Harvesting)
+# admin.site.register(Marketing)
+# admin.site.register(Processing)
 
 
 

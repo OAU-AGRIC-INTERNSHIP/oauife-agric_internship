@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from resources.models import Activity, Material, Input, Harvest, Market, Process
 
 class ProductionAbstract(models.Model):
-    started = models.DateField()
+    started = models.DateField(auto_now_add=True)
 
     class Meta:
         abstract = True
@@ -18,12 +18,14 @@ class ActivityAbstract(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f"{self.activity}" 
+
 class CommentAbstract(models.Model):
     strengths = models.TextField()
     weaknesses = models.TextField()
     opportunities = models.TextField()
     threats = models.TextField()
-    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related")
 
     class Meta:
         abstract = True
@@ -36,6 +38,9 @@ class InputAbstract(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f"{self.input}" 
+
 class HarvestingAbstract(models.Model):
     harvest = models.ForeignKey(Harvest, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_related")
     date = models.DateField()
@@ -44,6 +49,9 @@ class HarvestingAbstract(models.Model):
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return f"{self.harvest}" 
 
 class MarketingAbstract(models.Model):
     market = models.CharField(max_length=100)
@@ -57,6 +65,9 @@ class MarketingAbstract(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f"{self.market}" 
+
 class ProcessingAbstract(models.Model):
     raw_material = models.CharField(max_length=100)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
@@ -64,4 +75,7 @@ class ProcessingAbstract(models.Model):
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return f"{self.process}" 
 

@@ -131,7 +131,7 @@ def assign_permissions():
 
         # Resources
         'resources': [
-            ('add', 'file'), ('view', 'file'), ('change', 'file'), ('delete', 'file'), 
+            ('add', 'file'), ('view', 'file'), 
             ('view', 'crop'), ('view', 'livestock'), ('view', 'location'), ('view', 'timeline')
         ]
     }

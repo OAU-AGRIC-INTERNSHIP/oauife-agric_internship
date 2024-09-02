@@ -5,6 +5,9 @@ from assignments.models import Teamwork
 class Production(ProductionAbstract):
     teamwork = models.ForeignKey(Teamwork, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.teamwork} Team Production"
+
 class Activity(ActivityAbstract):
     production = models.ForeignKey(Production, on_delete=models.CASCADE)
 
