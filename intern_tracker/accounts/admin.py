@@ -1,10 +1,10 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 from .models import Profile, Team
-from intern_tracker.admin import intern_ui, supervisor_ui
+from intern_tracker.admin import intern_ui, supervisor_ui, admin_ui
 from django.contrib.auth.models import User
 from .forms import TeamAdminForm
 
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(ModelAdmin):
     list_display = ('get_username', 'get_first', 'get_last', 'get_email', 'matric_number', 'department', 'whatsapp',)
     search_fields = ['intern__username', 'matric_number', 'department__name']
 
@@ -55,7 +55,7 @@ class ProfileAdmin(admin.ModelAdmin):
         return some_fields
 
 # Customize the TeamAdmin class
-class TeamAdmin(admin.ModelAdmin):
+class TeamAdmin(ModelAdmin):
     form = TeamAdminForm
     list_display = ('name', 'lead', 'get_members')
     search_fields = ['name']
@@ -92,14 +92,7 @@ class TeamAdmin(admin.ModelAdmin):
     get_members.short_description = 'Members'
 
 # Register the models with the admin sites
-# for site in (admin.site, supervisor_ui):
-#     site.register(Profile)
-
-for site in (admin.site, supervisor_ui, intern_ui):
+for site in (admin_ui, supervisor_ui, intern_ui):
     site.register(Profile, ProfileAdmin)
-
-for site in (admin.site, supervisor_ui, intern_ui):
     site.register(Team, TeamAdmin)
-
-# intern_ui.register(Profile, ProfileAdmin)
 
