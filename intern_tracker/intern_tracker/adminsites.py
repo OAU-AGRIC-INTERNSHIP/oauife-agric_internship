@@ -13,19 +13,30 @@ from django.utils.text import capfirst
 
 class CustomAdminSite(AdminSite):
     def get_app_list(self, request):
+        # Build a dictionary of apps and their models that the user can access.
+        # The dictionary keys are app labels and the values are dictionaries containing model information.
         app_dict = self._build_app_dict(request)
 
-        # Sort the apps by a predefined order
+        # Define the desired order of apps as they should appear in the admin interface.
+        # Apps listed here will appear in this order. If an app is not listed here, it will appear later.
         ordered_apps = []
+
+        # Initialize an empty list to hold the ordered app list.
         app_list = []
 
+        # Loop through each app name in the predefined order.
         for app_name in ordered_apps:
+            # Check if the app name is in the app_dict.
             if app_name in app_dict:
+                # If the app name is found, append its details to the app_list.
                 app_list.append(app_dict.pop(app_name))
 
-        # Add any remaining apps (not in the ordered_apps) at the end
+        # After processing all ordered apps, add any remaining apps that were not specified
+        # in the 'ordered_apps' list. These will be appended to the end of the app_list.
         app_list.extend(app_dict.values())
 
+        # Return the final list of apps, now ordered according to the 'ordered_apps' list
+        # with any remaining apps added afterward.
         return app_list
 
     # def get_app_list(self, request):
