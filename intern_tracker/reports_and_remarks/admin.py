@@ -1,8 +1,8 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 from .models import Report, Remark
-from intern_tracker.admin import intern_ui, supervisor_ui
+from intern_tracker.admin import intern_ui, supervisor_ui, admin_ui
 
-class ReportAdmin(admin.ModelAdmin):
+class ReportAdmin(ModelAdmin):
     list_display = ('intern', 'timeline', 'challenges', 'recommendation', 'team')
     search_fields = ['intern__username', 'team__name']
 
@@ -17,7 +17,7 @@ class ReportAdmin(admin.ModelAdmin):
             return ['intern']
         return super().get_readonly_fields(request, obj)
 
-class RemarkAdmin(admin.ModelAdmin):
+class RemarkAdmin(ModelAdmin):
     list_display = ('report', 'supervisor', 'grade', 'comment')
     search_fields = ['report__intern__username', 'supervisor__username']
 
@@ -33,10 +33,7 @@ class RemarkAdmin(admin.ModelAdmin):
         return super().get_readonly_fields(request, obj)
 
 # Register the models with the admin sites
-for site in (admin.site, supervisor_ui):
-    site.register(Report)
-    site.register(Remark)
-
-intern_ui.register(Report, ReportAdmin)
-intern_ui.register(Remark, RemarkAdmin)
+for site in (intern_ui, supervisor_ui, admin_ui):
+    site.register(Report, ReportAdmin)
+    site.register(Remark, RemarkAdmin)
 
