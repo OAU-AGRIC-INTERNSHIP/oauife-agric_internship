@@ -5,6 +5,9 @@ from assignments.models import Proposal
 class Production(ProductionAbstract):
     proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.proposal} Individual Project"
+
 class Activity(ActivityAbstract):
     production = models.ForeignKey(Production, on_delete=models.CASCADE)
 

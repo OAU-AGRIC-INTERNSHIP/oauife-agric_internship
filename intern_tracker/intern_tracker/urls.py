@@ -5,10 +5,9 @@ URL configuration for the intern_tracker project.
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
 """
-from django.contrib import admin
 from django.urls import path, reverse
 from django.shortcuts import redirect
-from intern_tracker.admin import intern_ui, supervisor_ui
+from intern_tracker.admin import intern_ui, supervisor_ui, admin_ui
 from . import views  # Import the views module
 from django.conf import settings
 from django.conf.urls.static import static
@@ -28,7 +27,7 @@ def redirect_to_proper_path(request):
 # Write code that does the redirect to proper path check before trying to match any url
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
+    path('admin/', admin_ui.urls, name='admin'),
     path('intern/', intern_ui.urls, name='intern'),
     path('supervisor/', supervisor_ui.urls, name='supervisor'),
     path('home/', views.view_home, name='home'),  # Corrected to reference a view function
