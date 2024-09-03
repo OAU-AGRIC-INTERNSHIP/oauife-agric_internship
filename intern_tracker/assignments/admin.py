@@ -1,10 +1,10 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 from .models import Teamwork, Proposal, Special
-from intern_tracker.admin import intern_ui, supervisor_ui
+from intern_tracker.admin import intern_ui, supervisor_ui, admin_ui
 from django.contrib.auth.models import User
 from django.utils.html import format_html
 
-class TeamworkAdmin(admin.ModelAdmin):
+class TeamworkAdmin(ModelAdmin):
     list_display = ('title', 'timeline', 'task', 'team', 'unit', 'livestock', 'crop', 'location')
     search_fields = ['task']
 
@@ -26,7 +26,7 @@ class TeamworkAdmin(admin.ModelAdmin):
             return ['timeline', 'task', 'team', 'unit', 'livestock', 'crop', 'location']
         return super().get_readonly_fields(request, obj)
 
-class ProposalAdmin(admin.ModelAdmin):
+class ProposalAdmin(ModelAdmin):
     list_display = ('title', 'approved', 'intern', 'file_link', 'timeline', 'task', 'unit', 'location')
 
     def file_link(self, obj):
@@ -66,7 +66,7 @@ class ProposalAdmin(admin.ModelAdmin):
         return form  # Return the form class
 
 
-class SpecialAdmin(admin.ModelAdmin):
+class SpecialAdmin(ModelAdmin):
     list_display = ('title', 'timeline', 'task', 'miscellaneous_group', 'get_supervisors', 'location')
     search_fields = ['title', 'task']
 
@@ -92,12 +92,8 @@ class SpecialAdmin(admin.ModelAdmin):
         return qs.filter(miscellaneous_group__in=groups)
 
 # Register the models with the admin sites
-for site in (intern_ui, supervisor_ui, admin.site):
+for site in (intern_ui, supervisor_ui, admin_ui):
     site.register(Teamwork, TeamworkAdmin)
     site.register(Proposal, ProposalAdmin)
     site.register(Special, SpecialAdmin)
-
-# admin.site.register(Teamwork)
-# admin.site.register(Proposal)
-# admin.site.register(Special)
 
