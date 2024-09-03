@@ -1,8 +1,8 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 from .models import Production, Activity, Comment, Input, Harvesting, Marketing, Processing
-from intern_tracker.admin import intern_ui, supervisor_ui
+from intern_tracker.admin import intern_ui, supervisor_ui, admin_ui
 
-class ProductionAdmin(admin.ModelAdmin):
+class ProductionAdmin(ModelAdmin):
     list_display = ('teamwork', 'started')
     search_fields = ['teamwork']
 
@@ -29,32 +29,32 @@ class ProductionAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)  # Capture the returned form class
         return form  # Return the form class
 
-class ActivityAdmin(admin.ModelAdmin):
+class ActivityAdmin(ModelAdmin):
     list_display = ('production', 'description')
     search_fields = ['description']
 
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(ModelAdmin):
     list_display = ('production',)
     search_fields = ['creator__username']
 
-class InputAdmin(admin.ModelAdmin):
+class InputAdmin(ModelAdmin):
     list_display = ('production', 'quantity')
     search_fields = ['quantity']
 
-class HarvestingAdmin(admin.ModelAdmin):
+class HarvestingAdmin(ModelAdmin):
     list_display = ('production', 'date')
     search_fields = ['date']
 
-class MarketingAdmin(admin.ModelAdmin):
+class MarketingAdmin(ModelAdmin):
     list_display = ('production', 'date')
     search_fields = ['date']
 
-class ProcessingAdmin(admin.ModelAdmin):
+class ProcessingAdmin(ModelAdmin):
     list_display = ('production', 'process')
     search_fields = ['process']
 
 # Register the models with the admin sites
-for site in (intern_ui, supervisor_ui, admin.site):
+for site in (intern_ui, supervisor_ui, admin_ui):
     site.register(Production, ProductionAdmin)
     site.register(Activity, ActivityAdmin)
     site.register(Comment, CommentAdmin)
@@ -62,15 +62,4 @@ for site in (intern_ui, supervisor_ui, admin.site):
     site.register(Harvesting, HarvestingAdmin)
     site.register(Marketing, MarketingAdmin)
     site.register(Processing, ProcessingAdmin)
-
-# admin.site.register(Production)
-# admin.site.register(Activity)
-# admin.site.register(Comment)
-# admin.site.register(Input)
-# admin.site.register(Harvesting)
-# admin.site.register(Marketing)
-# admin.site.register(Processing)
-
-
-
 
