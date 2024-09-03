@@ -1,9 +1,9 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 from .models import (Activity, Course, Crop, Currency, Department, File, Grade,
                      Input, Livestock, Location, Material, Process, RawMaterial, Timeline, Unit)
-from intern_tracker.admin import intern_ui, supervisor_ui
+from intern_tracker.admin import intern_ui, supervisor_ui, admin_ui
 
-class FileAdmin(admin.ModelAdmin):
+class FileAdmin(ModelAdmin):
     list_display = ('name', 'file', 'owner')
     search_fields = ['name']
 
@@ -20,10 +20,11 @@ class FileAdmin(admin.ModelAdmin):
         return qs.filter(owner=request.user)
 
     def save_model(self, request, obj, form, change):
-        # If the object is being created (not edited), set the owner to the current user
-        if not change:  # 'change' is False when the object is being created
-            obj.owner = request.user
-        super().save_model(request, obj, form, change)
+        if not request.user.is_superuser:
+            # If the object is being created (not edited), set the owner to the current user
+            if not change:  # 'change' is False when the object is being created
+                obj.owner = request.user
+            super().save_model(request, obj, form, change)
 
     def get_fields(self, request, obj=None):
         # Exclude the owner field from the form entirely
@@ -32,8 +33,8 @@ class FileAdmin(admin.ModelAdmin):
             fields = [f for f in fields if f != 'owner']
         return fields
 
-# Register the models with the custom admin sites
-for site in (admin.site, intern_ui, supervisor_ui):
+# Register the models with the admin sites
+for site in (intern_ui, supervisor_ui, admin_ui):
     site.register(Activity)
     site.register(Course)
     site.register(Crop)
@@ -48,8 +49,5 @@ for site in (admin.site, intern_ui, supervisor_ui):
     site.register(RawMaterial)
     site.register(Timeline)
     site.register(Unit)
-
-for site in (admin.site, supervisor_ui):
     site.register(File, FileAdmin)
 
-intern_ui.register(File, FileAdmin)
