@@ -16,7 +16,10 @@ class ResourceAbstract(models.Model):
         return self.name
 
 class Activity(ResourceAbstract):
-    pass
+
+    class Meta:
+        verbose_name = "Activity"
+        verbose_name_plural = "Activities"
 
 class Course(ResourceAbstract):
     pass
@@ -25,7 +28,10 @@ class Crop(ResourceAbstract):
     pass
 
 class Currency(ResourceAbstract):
-    pass
+
+    class Meta:
+        verbose_name = "Currency"
+        verbose_name_plural = "Currencies"
 
 class Department(ResourceAbstract):
     pass
@@ -49,7 +55,10 @@ class Material(ResourceAbstract):
     pass
 
 class Process(ResourceAbstract):
-    pass
+
+    class Meta:
+        verbose_name = "Process"
+        verbose_name_plural = "Processes"
 
 class RawMaterial(ResourceAbstract):
     pass

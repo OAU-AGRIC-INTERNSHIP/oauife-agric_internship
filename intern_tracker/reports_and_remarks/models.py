@@ -13,8 +13,8 @@ class Report(models.Model):
     team = models.ForeignKey(Teamwork, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
-        verbose_name = "SWOT Report"
-        verbose_name_plural = "SWOT Reports"
+        verbose_name = "Report"
+        verbose_name_plural = "Reports"
 
     def __str__(self):
         return f"Report by {self.intern.username} - {self.timeline}"
