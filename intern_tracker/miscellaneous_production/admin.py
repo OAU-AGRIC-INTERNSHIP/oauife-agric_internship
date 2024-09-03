@@ -28,7 +28,6 @@ class ProductionAdmin(ModelAdmin):
         form = super().get_form(request, obj, **kwargs)  # Capture the returned form class
         return form  # Return the form class
 
-
 class ActivityAdmin(ModelAdmin):
     list_display = ('production', 'description')
     search_fields = ['description']
