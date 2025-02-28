@@ -2,13 +2,22 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from .models import Team  
+from django.db.utils import OperationalError
 
 class TeamAdminForm(forms.ModelForm):
-    members = forms.ModelMultipleChoiceField(
-        queryset=Group.objects.get(name='Interns').user_set.all(), #User.objects.filter(groups__name='Interns'),
-        required=False,
-        widget=admin.widgets.FilteredSelectMultiple('Users', is_stacked=False)
-    )
+    try:
+        interns = Group.objects.get(name='Interns')
+        members = forms.ModelMultipleChoiceField(
+            queryset=interns.user_set.all(), #User.objects.filter(groups__name='Interns'),
+            required=False,
+            widget=admin.widgets.FilteredSelectMultiple('Users', is_stacked=False)
+        )
+    except (OperationalError,Group.DoesNotExist):
+        members = forms.ModelMultipleChoiceField(
+            queryset=User.objects.none(), # Return an empty queryset if the group is missing
+            required=False,
+            widget=admin.widgets.FilteredSelectMultiple('Users', is_stacked=False)
+        )
 
     class Meta:
         model = Team
