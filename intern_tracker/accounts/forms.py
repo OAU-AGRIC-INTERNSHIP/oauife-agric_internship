@@ -6,7 +6,8 @@ from django.db.utils import OperationalError
 
 class TeamAdminForm(forms.ModelForm):
     try:
-        interns = Group.objects.get(name='Interns')
+        interns, _ = Group.objects.get_or_create(name='Interns')
+        #interns = Group.objects.get(name='Interns')
         members = forms.ModelMultipleChoiceField(
             queryset=interns.user_set.all(), #User.objects.filter(groups__name='Interns'),
             required=False,

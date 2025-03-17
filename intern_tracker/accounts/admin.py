@@ -2,7 +2,7 @@ from django.contrib.admin import ModelAdmin
 from .models import Profile, Team
 from intern_tracker.admin import intern_ui, supervisor_ui, admin_ui
 from django.contrib.auth.models import User
-from .forms import TeamAdminForm
+#from .forms import TeamAdminForm
 
 class ProfileAdmin(ModelAdmin):
     list_display = ('get_username', 'get_first', 'get_last', 'get_email', 'matric_number', 'department', 'whatsapp',)
@@ -56,7 +56,7 @@ class ProfileAdmin(ModelAdmin):
 
 # Customize the TeamAdmin class
 class TeamAdmin(ModelAdmin):
-    form = TeamAdminForm
+   # form = TeamAdminForm
     list_display = ('name', 'lead', 'get_members')
     search_fields = ['name']
 
