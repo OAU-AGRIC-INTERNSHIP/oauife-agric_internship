@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'assignments',
     'events',
     'group_production',
+    'individual_production',
     'miscellaneous_production',
     'reports_and_remarks',
     'resources',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,12 +85,12 @@ WSGI_APPLICATION = 'intern_tracker.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='intern_tracker'),
-        'USER': config('DB_USER', default='intern_tracker_user'),
-        'PASSWORD': config('DB_PASSWORD', default='intern_tracker'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'intern_tracker_db',
+        'USER': 'intern_tracker_user',
+        'PASSWORD': 'intern_pass',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 #DATABASES = {
