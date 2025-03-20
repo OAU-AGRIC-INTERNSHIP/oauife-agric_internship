@@ -1,0 +1,22 @@
+/* Header background color */
+#header {
+    background-color: #45388e;
+    /* Darker Green */
+}
+
+/* App Columns */
+.module caption,
+.module h2,
+div.breadcrumbs {
+    background-color: #6e66bb;
+    /* Lighter Green */
+}
+
+/* Hover effects for buttons */
+.button:hover,
+.action-button:hover {
+    background-color: #45388e;
+    /* Darker Green */
+    border-color: #4e4caf;
+    /* Green */
+}
