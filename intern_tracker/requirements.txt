@@ -1,9 +1,11 @@
 asgiref==3.8.1
 Django==4.2.15
 gunicorn==23.0.0
+mysqlclient==2.2.7
 packaging==24.2
 pillow==10.4.0
 psycopg2-binary==2.9.10
 python-decouple==3.8
 sqlparse==0.5.1
 typing_extensions==4.12.2
+whitenoise==6.9.0
