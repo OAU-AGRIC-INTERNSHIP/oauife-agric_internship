@@ -18,8 +18,8 @@
 {% block extrahead %}
 {{ block.super }}
 
-<!-- <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-<link rel="manifest" href="{% static 'manifest.json' %}"> -->
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+<link rel="manifest" href="{% static 'manifest.json' %}">
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/base_site.css' %}">
 
@@ -33,6 +33,16 @@
 
 <script type="text/javascript" src="{% static 'js/base_site.js' %}"></script>
 
+<!-- Register service worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/static/serviceworker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker registration failed:', err));
+    });
+  }
+</script>
 <!-- <script>
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.register("{% static 'serviceworker.js' %}")
